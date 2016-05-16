@@ -1,10 +1,13 @@
 # clojulator
 
-FIXME: Write a one-line description of your library/project.
+Calculator made using Clojurescript + Om. Runs in the browser, iOS and Android.
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+This is a project meant for learning clojure/clojurescript. Not really meant to build a full-scale project,
+just something to get a taste of clojurescript and Om.
+
+![](screenshot.png)
 
 ## Setup
 
@@ -34,6 +37,4 @@ get live reloading, nor a REPL.
 
 ## License
 
-Copyright © 2014 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+Copyright © 2016 Victor Bjelkholm MIT
