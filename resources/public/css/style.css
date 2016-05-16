@@ -1,26 +1,59 @@
-/* some style */
-
 html, body {
   padding: 0px;
   margin: 0px;
-  width: 100%;
-  height: 100%;
-  position: relative;
   font-family: sans-serif;
-}
-
-.button {
   background-color: #3E505C;
+}
+#wrapper {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+}
+#results, #input {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  padding-right: 30px;
+  padding-top: 5%;
+  background-color: #FFA774;
+  box-sizing: border-box;
+  border: none;
+  font-family: sans-serif;
+  text-align: right;
+  width: 100%;
+}
+#results {
+  top: 0vh;
+  height: 10vh;
+  color: white;
+  font-size: 40px;
+}
+#input {
+  top: 10vh;
+  height: 10vh;
+  color: #BA7043;
+  font-size: 20px;
+  margin-top: -1px;
+}
+#buttons {
+  position: absolute;
+  top: 20vh;
+  height: 80vh;
+  left: 0px; right: 0px;
+}
+.button {
+  display: block;
+  position: relative;
+  background-color: #3E505C;
+  float: left;
   width: calc(100% / 4);
+  height: calc(100% / 5);
+  padding-top: calc(80vh / 12);
+  text-align: center;
   border: 1px solid #3C4C58;
   box-sizing: border-box;
-  margin: 0px;
   color: white;
-  padding: 0px;
-  float: left;
-  text-align: center;
-  padding-top: 25px;
-  padding-bottom: 25px;
   -webkit-transition: all 50ms ease-in-out;
   -moz-transition: all 50ms ease-in-out;
   -o-transition: all 50ms ease-in-out;
@@ -33,34 +66,6 @@ html, body {
   -ms-user-select: none;
   user-select: none;
 }
-
 .button:active {
   background-color: #455663;
-}
-
-.input, .results {
-  width: calc(100% - 40px);
-  height: 40px;
-  font-family: sans-serif;
-  text-align: right;
-  padding: 20px;
-  padding-bottom: 5px;
-  padding-top: 5px;
-  background-color: #FFA774;
-  border: none;
-}
-
-.input {
-  color: #BA7043;
-  font-size: 20px;
-}
-
-.results {
-  color: white;
-  font-size: 40px;
-  -webkit-transition: all 50ms ease-in-out;
-  -moz-transition: all 50ms ease-in-out;
-  -o-transition: all 50ms ease-in-out;
-  -ms-transition: all 50ms ease-in-out;
-  transition: all 50ms ease-in-out;
 }

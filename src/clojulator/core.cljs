@@ -6,6 +6,8 @@
 
 (enable-console-print!)
 
+;; state and state modifiers
+
 (defonce app-state
   (atom {:buttons [
        "+" "-" "x" "/"
@@ -31,6 +33,8 @@
   (do (reset-results!)
       (.setTimeout js/window #(swap! app-state assoc :results results) 100)))
 
+;; Evaluator
+
 (defn evaluate-input
   [input-to-evaluate]
   (try
@@ -38,9 +42,11 @@
     (catch js/Error e
       e)))
 
+;; Input handling
+
 (defn handle-input-change
+  "Method that does the right thing depending on input"
   [button-label]
-  ;; Add a way to use the results when the previous time was evaluated
   (cond
     (= button-label "=")
       (set-results! (evaluate-input (@app-state :input)))
@@ -51,6 +57,7 @@
     :else (add-number-to-input! button-label)))
 
 (defn receive-keypress
+  "Receives normal letters/numbers from keypress event"
   [ev]
   (let
     [pressed-key (.fromCharCode js/String (.-keyCode ev))
@@ -60,6 +67,7 @@
     :else (handle-input-change pressed-key))))
 
 (defn receive-special-keypress
+  "Receives special key combinations, like ESC, from keydown event"
   [ev]
    (cond
      (= (.-keyCode ev), 27) (handle-input-change "AC")
@@ -68,78 +76,48 @@
          (.preventDefault ev)
          (handle-input-change "C"))))
 
+(defn handle-button-click
+  [button-label]
+  (handle-input-change button-label))
+
+;; Register for global events
 (events/listen (googdom/getWindow) (.-KEYPRESS events/EventType) receive-keypress)
 (events/listen (googdom/getWindow) (.-KEYDOWN events/EventType) receive-special-keypress)
 
-(defn normalize-key-or-button-press
-  "Takes either a keyCode or an button-label and normalizes it into a button-label"
-  [event-or-label]
-  event-or-label)
-;; Normalization of the keypress and the button clicks
-;;
-;; Func for listen for click
-(defn handle-button-click
-  [button-label]
-  (handle-input-change (normalize-key-or-button-press button-label)))
-
-;; Func for listen for keypress
-;; (events/listen (googdom/getWindow) (.-KEYPRESS events/EventType) receive-keypress)
-;; (defn receive-keypress
-;;   [ev]
-;;   (handle-input-change (normalize-key-or-button-press (.-keyCode ev))))
-
-;; Func for applying change
-;; (defn handle-input-change []
-;;   (cond
-;;     (= button-label "=")
-;;       (set-results! (evaluate-input (@app-state :input)))
-;;     (= button-label "C")
-;;       (remove-number-from-input!)
-;;     (= button-label "AC")
-;;       (do (reset-results!) (reset-input!))
-;;     :else (add-number-to-input! button-label)))
-
-(defn print-input
-  "Simply just print the input"
-  [input]
-  (println input))
-
+;; Views
 (defn button-view [button-label]
   (reify
     om/IRender
     (render [this]
       (dom/div #js {
         :className "button"
-        :onClick #(handle-button-click button-label)
+        :onTouchEnd #(handle-button-click button-label)
         } button-label))))
-
 (defn buttons-view [data owner]
   (reify
     om/IRender
     (render [this]
-      (dom/div nil
-        (apply dom/div nil
-           (om/build-all button-view (:buttons data)))))))
-
+        (apply dom/div #js {:id "buttons"}
+           (om/build-all button-view (:buttons data))))))
 (defn input-view [data owner]
   (reify
     om/IRender
     (render [this]
-      (dom/input #js {:className "input" :value (:input data)}))))
-
+      (dom/div nil (:input data)))))
 (defn results-view [data owner]
   (reify
     om/IRender
     (render [this]
-      (dom/input #js {:className "results" :value (:results data)}))))
+      (dom/div nil (:results data)))))
 
+;; Mounting
 (om/root input-view app-state
   {:target (. js/document (getElementById "input"))})
 (om/root buttons-view app-state
-  {:target (. js/document (getElementById "buttons"))})
+  {:target (. js/document (getElementById "buttons-mount"))})
 (om/root results-view app-state
   {:target (. js/document (getElementById "results"))})
 
 ;; (swap! app-state update-in [:__figwheel_counter] inc)
-(defn on-js-reload []
-  (.clear window.console))
+;; (defn on-js-reload []
+;;   (.clear window.console))
