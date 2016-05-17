@@ -40,7 +40,7 @@
   (try
     (js/eval (clojure.string/replace input-to-evaluate "x" "*"))
     (catch js/Error e
-      "Error")))
+      e)))
 
 ;; Input handling
 
